@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🥁 Drum Hero Jr.</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ── App Header ────────────────────────────────────────────────── -->
+  <header class="app-header">
+    <div>
+      <h1 class="app-title">🥁 Drum Hero Jr.</h1>
+      <p class="app-tagline">Learn to play drums — one beat at a time!</p>
+    </div>
+    <div class="star-counter">
+      ⭐ <span id="total-stars">0</span>
+    </div>
+  </header>
+
+  <!-- ── App Body (sidebar + main) ─────────────────────────────────── -->
+  <div class="app-body">
+
+    <!-- ── Sidebar: pattern chooser + badges ─────────────────────── -->
+    <aside class="sidebar">
+
+      <div class="sidebar-header">
+        <p class="sidebar-title">Choose a Pattern</p>
+        <div class="level-filters">
+          <button class="level-btn active" data-level="all">All</button>
+          <button class="level-btn" data-level="1">⭐ Lvl 1</button>
+          <button class="level-btn" data-level="2">⭐⭐ Lvl 2</button>
+          <button class="level-btn" data-level="3">⭐⭐⭐ Lvl 3</button>
+          <button class="level-btn" data-level="4">Lvl 4</button>
+          <button class="level-btn" data-level="5">Lvl 5 🔥</button>
+        </div>
+      </div>
+
+      <!-- Pattern cards injected here by app.js -->
+      <div class="pattern-list" id="pattern-list"></div>
+
+      <!-- Badges -->
+      <div class="badges-section">
+        <p class="badges-title">🏆 Your Badges</p>
+        <div class="badges-container" id="badges-container"></div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main content ───────────────────────────────────────────── -->
+    <div class="main-content">
+
+      <!-- Pattern info bar -->
+      <div class="pattern-info">
+        <div class="pattern-info-left">
+          <h2 class="pattern-main-name" id="pattern-name">Pick a pattern on the left!</h2>
+          <p class="pattern-song-label" id="pattern-artist"></p>
+          <p class="pattern-tip" id="pattern-tip">Click any card to start learning 🥁</p>
+        </div>
+        <div class="pattern-meta">
+          <div class="pattern-earned-stars" id="pattern-stars">☆☆☆</div>
+          <div class="target-bpm-label" id="target-bpm">Target: — BPM</div>
+        </div>
+      </div>
+
+      <!-- Drum grid -->
+      <div class="grid-wrapper">
+        <!--
+          Grid is built dynamically by renderDrumGrid() in app.js.
+          Rows = instruments (crash → kick, top to bottom).
+          Columns = 16 steps (16th notes in a 4/4 bar).
+          Beat 1 = col 0, Beat 2 = col 4, Beat 3 = col 8, Beat 4 = col 12.
+        -->
+        <div id="drum-grid"></div>
+      </div>
+
+      <!-- Transport + BPM controls -->
+      <div class="controls-panel">
+
+        <!-- BPM row -->
+        <div class="bpm-row">
+          <span class="bpm-label">Speed:</span>
+          <span class="bpm-value"><span id="bpm-display">80</span> BPM</span>
+          <span class="bpm-hint" id="bpm-hint">🎵</span>
+          <input
+            type="range"
+            id="bpm-slider"
+            min="40"
+            max="160"
+            value="80"
+            aria-label="Tempo in BPM"
+          >
+          <span class="bpm-label">🐢 Slow &nbsp;&nbsp; Fast 🚀</span>
+        </div>
+
+        <!-- Transport buttons -->
+        <div class="transport-row">
+          <button id="play-btn"     class="big-btn">▶ PLAY!</button>
+          <button id="loop-btn"     class="big-btn active">↺ Loop: ON</button>
+          <button id="practice-btn" class="big-btn">🐢 Practice Mode</button>
+        </div>
+
+      </div>
+
+    </div><!-- /main-content -->
+
+  </div><!-- /app-body -->
+
+  <!-- ── Count-in overlay (3 … 2 … 1 … GO!) ───────────────────────── -->
+  <div id="count-overlay" class="hidden">
+    <div id="count-number">3</div>
+  </div>
+
+  <!-- ── Reward modal ───────────────────────────────────────────────── -->
+  <div id="reward-modal" class="hidden" role="dialog" aria-modal="true">
+    <div class="reward-content">
+      <span id="reward-emoji">⭐⭐⭐</span>
+      <h2 id="reward-title">Amazing!</h2>
+      <p id="reward-message">You rocked it!</p>
+      <div id="reward-badges" class="hidden"></div>
+      <button id="reward-close" class="big-btn">Keep Going! 🎉</button>
+    </div>
+  </div>
+
+  <!-- ── Toast notifications ────────────────────────────────────────── -->
+  <div id="toast" class="hidden" role="status" aria-live="polite"></div>
+
+  <!-- ── Scripts (order matters — patterns before rewards before app) ─ -->
+  <script src="js/patterns.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/rewards.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

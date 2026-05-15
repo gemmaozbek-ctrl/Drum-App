@@ -1,0 +1,785 @@
+/* ── Google Fonts ──────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+/* ── CSS Variables ─────────────────────────────────────────────────────────── */
+:root {
+  --bg:          #0d0d1a;
+  --bg-card:     #16162a;
+  --bg-panel:    #1e1e36;
+  --bg-control:  #252545;
+
+  --pink:        #ff4d8d;
+  --orange:      #ff8c42;
+  --yellow:      #ffd93d;
+  --teal:        #4ecdc4;
+  --purple:      #a855f7;
+  --green:       #22c55e;
+
+  --text:        #f0f0ff;
+  --text-muted:  #8888aa;
+
+  --radius-sm:   8px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+
+  --shadow:      0 4px 24px rgba(0,0,0,0.5);
+  --glow-pink:   0 0 16px rgba(255,77,141,0.6);
+  --glow-yellow: 0 0 16px rgba(255,217,61,0.7);
+}
+
+/* ── Reset & Base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle animated star-field background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(168,85,247,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(78,205,196,0.10) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--bg-card);
+  border-bottom: 2px solid rgba(255,255,255,0.07);
+  position: relative;
+  z-index: 10;
+}
+
+.app-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  background: linear-gradient(135deg, var(--pink), var(--orange), var(--yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.app-tagline {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.star-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,217,61,0.15);
+  border: 2px solid rgba(255,217,61,0.4);
+  border-radius: var(--radius-xl);
+  padding: 8px 16px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  color: var(--yellow);
+  min-width: 90px;
+  justify-content: center;
+}
+
+/* ── Main layout ───────────────────────────────────────────────────────────── */
+.app-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 0;
+  min-height: calc(100vh - 72px);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+.sidebar {
+  background: var(--bg-card);
+  border-right: 2px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  grid-row: 1 / 4;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.sidebar-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+/* Level filter buttons */
+.level-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.level-btn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.level-btn:hover {
+  border-color: var(--pink);
+  color: var(--pink);
+}
+
+.level-btn.active {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: #fff;
+  box-shadow: var(--glow-pink);
+}
+
+/* Pattern list */
+.pattern-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pattern-list::-webkit-scrollbar { width: 4px; }
+.pattern-list::-webkit-scrollbar-track { background: transparent; }
+.pattern-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+
+.pattern-card {
+  background: var(--bg-panel);
+  border: 2px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto auto auto;
+  column-gap: 10px;
+  align-items: start;
+}
+
+.pattern-card:hover {
+  border-color: rgba(255,77,141,0.5);
+  transform: translateX(3px);
+}
+
+.pattern-card.selected {
+  border-color: var(--pink);
+  background: rgba(255,77,141,0.1);
+  box-shadow: inset 3px 0 0 var(--pink);
+}
+
+.card-emoji {
+  font-size: 2rem;
+  grid-row: 1 / 4;
+  display: flex;
+  align-items: center;
+}
+
+.card-name {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.card-artist {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.card-level {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.level-dots {
+  color: var(--orange);
+  letter-spacing: 1px;
+}
+
+.card-stars {
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+/* ── Main content area ─────────────────────────────────────────────────────── */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+}
+
+/* ── Pattern info ──────────────────────────────────────────────────────────── */
+.pattern-info {
+  padding: 18px 24px 14px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pattern-info-left { flex: 1; }
+
+.pattern-main-name {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.pattern-song-label {
+  font-size: 0.85rem;
+  color: var(--teal);
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.pattern-tip {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  max-width: 500px;
+}
+
+.pattern-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.pattern-earned-stars {
+  font-size: 1.2rem;
+}
+
+.target-bpm-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.07);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  font-weight: 700;
+}
+
+/* ── Drum grid ─────────────────────────────────────────────────────────────── */
+.grid-wrapper {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 20px 24px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.grid-wrapper::-webkit-scrollbar { height: 6px; }
+.grid-wrapper::-webkit-scrollbar-track { background: transparent; }
+.grid-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+#drum-grid {
+  display: grid;
+  gap: 5px;
+  min-width: 600px;
+}
+
+/* Step number labels at top */
+.grid-corner {
+  /* empty top-left cell */
+}
+
+.step-label {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  padding-bottom: 4px;
+  transition: color 0.05s;
+}
+
+.step-label.on-beat {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.step-label.current-step {
+  color: var(--yellow) !important;
+}
+
+/* Row labels */
+.row-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px 0 6px;
+  border-left: 3px solid transparent;
+  min-width: 80px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.row-emoji { font-size: 1.1rem; }
+
+.row-name {
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Individual step cells */
+.grid-cell {
+  width: 100%;
+  aspect-ratio: 1;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.08s;
+  position: relative;
+  overflow: hidden;
+}
+
+.grid-cell.alt-beat {
+  background: rgba(255,255,255,0.02);
+}
+
+/* Cell with a drum note */
+.grid-cell.has-note {
+  background: var(--note-color, #ff6b6b);
+  border-color: transparent;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--note-color, #ff6b6b) 60%, transparent);
+}
+
+.grid-cell.has-note::after {
+  content: '';
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+}
+
+/* Active step column — ghost highlight on empty cells */
+.grid-cell.current-step:not(.has-note) {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* Drum hit animation */
+@keyframes hitPulse {
+  0%   { transform: scale(1);    filter: brightness(1); }
+  30%  { transform: scale(1.35); filter: brightness(1.9); }
+  100% { transform: scale(1);    filter: brightness(1); }
+}
+
+.grid-cell.hitting {
+  animation: hitPulse 0.18s ease-out forwards;
+}
+
+/* ── Controls panel ────────────────────────────────────────────────────────── */
+.controls-panel {
+  background: var(--bg-panel);
+  border-top: 2px solid rgba(255,255,255,0.07);
+  padding: 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* BPM row */
+.bpm-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.bpm-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.bpm-value {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem;
+  color: var(--yellow);
+  min-width: 60px;
+  text-align: center;
+}
+
+.bpm-hint { font-size: 1.4rem; }
+
+/* Range slider — cross-browser */
+#bpm-slider {
+  flex: 1;
+  min-width: 140px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(to right, var(--teal), var(--orange), var(--pink));
+  outline: none;
+  cursor: pointer;
+}
+
+#bpm-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  cursor: pointer;
+  border: 3px solid var(--yellow);
+  transition: transform 0.1s;
+}
+
+#bpm-slider::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  cursor: pointer;
+  border: 3px solid var(--yellow);
+}
+
+#bpm-slider:hover::-webkit-slider-thumb { transform: scale(1.15); }
+#bpm-slider:disabled { opacity: 0.5; cursor: not-allowed; }
+#bpm-slider:disabled::-webkit-slider-thumb { cursor: not-allowed; }
+
+/* Transport buttons row */
+.transport-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── Big buttons ───────────────────────────────────────────────────────────── */
+.big-btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+.big-btn:hover  { transform: translateY(-2px); filter: brightness(1.1); }
+.big-btn:active { transform: scale(0.95); }
+.big-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; filter: none; }
+
+/* Play button */
+#play-btn {
+  background: linear-gradient(135deg, var(--green), #16a34a);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(34,197,94,0.4);
+  min-width: 130px;
+  font-size: 1.25rem;
+}
+
+#play-btn.playing {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 4px 20px rgba(245,158,11,0.4);
+}
+
+/* Loop button */
+#loop-btn {
+  background: var(--bg-control);
+  color: var(--text-muted);
+  border: 2px solid rgba(255,255,255,0.15);
+}
+
+#loop-btn.active {
+  color: var(--teal);
+  border-color: var(--teal);
+  box-shadow: 0 0 12px rgba(78,205,196,0.3);
+}
+
+/* Practice button */
+#practice-btn {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+}
+
+/* ── Badges section ────────────────────────────────────────────────────────── */
+.badges-section {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.badges-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.badges-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: background 0.15s;
+}
+
+.badge-item.earned {
+  background: rgba(255,217,61,0.1);
+  color: var(--yellow);
+}
+
+.badge-item.locked {
+  background: rgba(255,255,255,0.03);
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.badge-emoji { font-size: 1.1rem; }
+.badge-label { font-size: 0.75rem; }
+
+/* ── Count-in overlay ──────────────────────────────────────────────────────── */
+#count-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 25, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+#count-overlay.hidden { display: none; }
+
+#count-number {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(6rem, 20vw, 14rem);
+  color: var(--yellow);
+  text-shadow: var(--glow-yellow), 0 0 60px rgba(255,217,61,0.5);
+  line-height: 1;
+  user-select: none;
+}
+
+@keyframes countPop {
+  0%   { transform: scale(0.4); opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+#count-number.pop {
+  animation: countPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Reward modal ──────────────────────────────────────────────────────────── */
+#reward-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 25, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  backdrop-filter: blur(6px);
+}
+
+#reward-modal.hidden { display: none; }
+
+.reward-content {
+  background: var(--bg-card);
+  border: 2px solid rgba(255,217,61,0.3);
+  border-radius: var(--radius-xl);
+  padding: 40px 48px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(255,217,61,0.15), var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sparkle top bar */
+.reward-content::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--pink), var(--yellow), var(--teal), var(--purple));
+}
+
+@keyframes rewardBounce {
+  0%   { transform: translateY(-40px) scale(0.5); opacity: 0; }
+  70%  { transform: translateY(8px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+#reward-emoji {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 12px;
+  animation: rewardBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+#reward-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: var(--yellow);
+  margin-bottom: 8px;
+}
+
+#reward-message {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+#reward-badges {
+  margin-bottom: 20px;
+}
+
+#reward-badges.hidden { display: none; }
+
+.new-badge {
+  background: rgba(255,217,61,0.1);
+  border: 1px solid rgba(255,217,61,0.3);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: var(--yellow);
+}
+
+#reward-close {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: #fff;
+  box-shadow: var(--glow-pink);
+  width: 100%;
+  font-size: 1.2rem;
+}
+
+/* ── Toast ─────────────────────────────────────────────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-xl);
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  z-index: 300;
+  pointer-events: none;
+  transition: opacity 0.5s;
+  white-space: nowrap;
+}
+
+#toast.hidden { display: none; }
+
+#toast.fade-out { opacity: 0; }
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .app-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+  }
+
+  .sidebar {
+    grid-row: auto;
+    border-right: none;
+    border-bottom: 2px solid rgba(255,255,255,0.06);
+    max-height: 220px;
+  }
+
+  .pattern-list {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    padding: 10px;
+  }
+
+  .pattern-card {
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+
+  .badges-section { max-height: 150px; }
+
+  .controls-panel { padding: 14px 16px; }
+
+  .bpm-row { flex-wrap: nowrap; }
+
+  .big-btn { padding: 12px 18px; font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .app-header { padding: 12px 16px; }
+  .app-title { font-size: 1.4rem; }
+
+  .grid-wrapper { padding: 12px 12px; }
+
+  .grid-cell { min-width: 24px; min-height: 24px; }
+
+  .transport-row { gap: 8px; }
+  .big-btn { padding: 10px 14px; font-size: 0.9rem; }
+}
