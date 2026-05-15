@@ -15,16 +15,17 @@ const hitDetector = new HitDetector();
 const timingEval  = new TimingEvaluator();
 
 const state = {
-  pattern:      null,
-  isPlaying:    false,
-  isLooping:    true,
-  isPractice:   false,
-  bpm:          80,
-  currentStep:  -1,
-  loopCount:    0,
-  practiceBpm:  54,
-  activeLevel:  'all',
-  phase2Active: false,   // Phase 2: mic listen mode
+  pattern:           null,
+  isPlaying:         false,
+  isLooping:         true,
+  isPractice:        false,
+  bpm:               80,
+  currentStep:       -1,
+  loopCount:         0,
+  practiceBpm:       54,
+  activeLevel:       'all',
+  phase2Active:      false,   // Phase 2: mic listen mode
+  lastPhase2Toast:   0,       // timestamp (ms) of last Phase 2 score toast
 };
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
@@ -257,10 +258,15 @@ function handleLoopComplete(loopNum) {
     const score = timingEval.getScore();
     if (score.total > 0) {
       if (state.isLooping) {
-        // Keep the beat going — just toast the score, verdicts stay on grid
+        // Rate-limited toast: 1 min if struggling, 2 min if doing well
         const pct = Math.round((score.hits / score.total) * 100);
-        showToast(`🎤 Loop: ${pct}% — ${score.perfect}🟢 ${score.close}🟡 ${score.misses}🔴`);
-        setTimeout(clearCellVerdicts, 600);
+        const secSince = (Date.now() - state.lastPhase2Toast) / 1000;
+        const minGap = pct >= 80 ? 120 : 60;
+        if (secSince >= minGap) {
+          showToast(pct >= 80 ? `🎤 ${pct}% — great beat!` : `🎤 ${pct}% — keep going!`);
+          state.lastPhase2Toast = Date.now();
+        }
+        setTimeout(clearCellVerdicts, 800);
       } else {
         showAccuracyModal(score);
       }
@@ -336,7 +342,8 @@ async function togglePhase2() {
 
   if (state.phase2Active) {
     // Turn off
-    state.phase2Active = false;
+    state.phase2Active    = false;
+    state.lastPhase2Toast = 0;
     hitDetector.stop();
     clearCellVerdicts();
     timingEval.reset();
