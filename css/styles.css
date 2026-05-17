@@ -628,113 +628,70 @@ body::before {
   animation: countPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-/* ── Reward modal ──────────────────────────────────────────────────────────── */
-#reward-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(10, 10, 25, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  backdrop-filter: blur(6px);
-}
-
-#reward-modal.hidden { display: none; }
-
-.reward-content {
-  background: var(--bg-card);
-  border: 2px solid rgba(255,217,61,0.3);
-  border-radius: var(--radius-xl);
-  padding: 40px 48px;
-  max-width: 420px;
-  width: 90%;
-  text-align: center;
-  box-shadow: 0 0 60px rgba(255,217,61,0.15), var(--shadow);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Sparkle top bar */
-.reward-content::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--pink), var(--yellow), var(--teal), var(--purple));
-}
-
-@keyframes rewardBounce {
-  0%   { transform: translateY(-40px) scale(0.5); opacity: 0; }
-  70%  { transform: translateY(8px) scale(1.1); opacity: 1; }
-  100% { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-#reward-emoji {
-  font-size: 3.5rem;
-  display: block;
-  margin-bottom: 12px;
-  animation: rewardBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-#reward-title {
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.8rem;
-  color: var(--yellow);
-  margin-bottom: 8px;
-}
-
-#reward-message {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  margin-bottom: 20px;
-}
-
-#reward-badges {
-  margin-bottom: 20px;
-}
-
-#reward-badges.hidden { display: none; }
-
-.new-badge {
-  background: rgba(255,217,61,0.1);
-  border: 1px solid rgba(255,217,61,0.3);
-  border-radius: var(--radius-sm);
-  padding: 8px 12px;
-  margin-bottom: 6px;
-  font-size: 0.9rem;
-  color: var(--yellow);
-}
-
-#reward-close {
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  color: #fff;
-  box-shadow: var(--glow-pink);
-  width: 100%;
-  font-size: 1.2rem;
-}
-
-/* ── Toast ─────────────────────────────────────────────────────────────────── */
+/* ── Toast (replaces all modals — auto-dismissing, no interaction needed) ───── */
 #toast {
   position: fixed;
-  bottom: 24px;
+  bottom: 28px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(0);
   background: var(--bg-card);
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.15);
   border-radius: var(--radius-xl);
-  padding: 10px 20px;
-  font-weight: 700;
-  font-size: 0.9rem;
+  padding: 14px 26px;
   z-index: 300;
   pointer-events: none;
-  transition: opacity 0.5s;
-  white-space: nowrap;
+  min-width: 200px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+  transition: opacity 0.45s, transform 0.45s;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 #toast.hidden { display: none; }
 
-#toast.fade-out { opacity: 0; }
+#toast.fade-out {
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.toast-emoji {
+  font-size: 1.9rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.toast-content { flex: 1; text-align: left; }
+
+.toast-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.15rem;
+  color: var(--yellow);
+  line-height: 1.2;
+}
+
+.toast-msg {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* Simple (string) toast: hide emoji+title wrappers, center the msg */
+#toast:not(.toast-rich) {
+  justify-content: center;
+}
+
+#toast:not(.toast-rich) .toast-emoji,
+#toast:not(.toast-rich) .toast-title { display: none; }
+
+#toast:not(.toast-rich) .toast-msg {
+  color: var(--text);
+  font-size: 0.92rem;
+  text-align: center;
+}
 
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
@@ -882,85 +839,20 @@ body::before {
   transition: width 0.05s linear, background 0.1s;
 }
 
-/* ── Phase 2 — accuracy modal ──────────────────────────────────────────────── */
-
-#accuracy-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(10,10,25,0.82);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 210;
-  backdrop-filter: blur(6px);
-}
-
-#accuracy-modal.hidden { display: none; }
-
-.accuracy-content {
-  background: var(--bg-card);
-  border: 2px solid rgba(34,197,94,0.35);
-  border-radius: var(--radius-xl);
-  padding: 36px 44px;
-  max-width: 400px;
-  width: 90%;
+/* ── Footer ─────────────────────────────────────────────────────────────────── */
+.app-footer {
   text-align: center;
-  box-shadow: 0 0 60px rgba(34,197,94,0.12), var(--shadow);
-  position: relative;
-  overflow: hidden;
-}
-
-.accuracy-content::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #22c55e, #fbbf24, #ef4444);
-}
-
-.acc-emoji {
-  font-size: 3rem;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.acc-title {
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.7rem;
-  color: var(--yellow);
-  margin-bottom: 10px;
-}
-
-.acc-pct {
-  font-family: 'Fredoka One', cursive;
-  font-size: 3.5rem;
-  color: #22c55e;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.acc-score {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 14px;
-}
-
-.acc-breakdown {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  font-size: 0.82rem;
-  font-weight: 700;
+  padding: 10px;
+  font-size: 0.72rem;
   color: var(--text-muted);
-  margin-bottom: 20px;
+  background: var(--bg-card);
+  border-top: 1px solid rgba(255,255,255,0.06);
 }
 
-.acc-close-btn {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #fff;
-  width: 100%;
-  font-size: 1.15rem;
-  box-shadow: 0 4px 20px rgba(34,197,94,0.4);
+.app-footer a {
+  color: var(--teal);
+  text-decoration: none;
+  font-weight: 700;
 }
+
+.app-footer a:hover { text-decoration: underline; }

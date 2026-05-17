@@ -5,7 +5,7 @@
  * TimingEvaluator — matches detected hits to expected beat-step windows
  */
 
-// ── HitDetector ─────────────────────────────────────────────────────────────────────────────
+// ── HitDetector ───────────────────────────────────────────────────────────────
 
 class HitDetector {
   constructor() {
@@ -99,7 +99,7 @@ class HitDetector {
   }
 }
 
-// ── TimingEvaluator ─────────────────────────────────────────────────────────────────────────────
+// ── TimingEvaluator ───────────────────────────────────────────────────────────
 
 class TimingEvaluator {
   constructor() {

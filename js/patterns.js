@@ -181,6 +181,147 @@ const PATTERNS = [
     },
   },
 
+  /* ── LEVEL 1 (new) ───────────────────────────────────────── */
+
+  {
+    id: 'reggae_bounce',
+    name: 'Reggae Bounce',
+    level: 1,
+    targetBpm: 68,
+    song: null,
+    artist: null,
+    songEmoji: '🌴',
+    tip: 'Reggae feel! The hi-hat skips to the OFFBEAT — it bobs like waves. Count the gaps!',
+    instruments: {
+      kick:  [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+      hihat: [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+    },
+  },
+
+  /* ── LEVEL 2 (new) ───────────────────────────────────────── */
+
+  {
+    id: 'hip_hop_classic',
+    name: 'Hip Hop Classic',
+    level: 2,
+    targetBpm: 88,
+    song: null,
+    artist: null,
+    songEmoji: '🎤',
+    tip: 'Hip hop basics — kick, snare, hi-hat, plus a sneaky extra kick on beat 3+!',
+    instruments: {
+      kick:  [1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0],
+      snare: [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      hihat: [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+    },
+  },
+
+  /* ── LEVEL 3 (new) ───────────────────────────────────────── */
+
+  {
+    id: 'uptown_funk',
+    name: 'Uptown Funk',
+    level: 3,
+    targetBpm: 115,
+    song: 'Uptown Funk',
+    artist: 'Bruno Mars & Mark Ronson',
+    songEmoji: '🕺',
+    tip: 'Funky! The kick punches early on beat 1+ — feel that swagger!',
+    instruments: {
+      kick:  [1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0],
+      snare: [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      hihat: [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+    },
+  },
+
+  {
+    id: 'old_town_road',
+    name: 'Old Town Road',
+    level: 3,
+    targetBpm: 95,
+    song: 'Old Town Road',
+    artist: 'Lil Nas X',
+    songEmoji: '🤠',
+    tip: 'Country-trap crossover — yeehaw! The kick has a surprise on beat 2+ and beat 4!',
+    instruments: {
+      kick:  [1,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0],
+      snare: [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      hihat: [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+    },
+  },
+
+  {
+    id: 'cant_stop_feeling',
+    name: "Can't Stop the Feeling",
+    level: 3,
+    targetBpm: 113,
+    song: "Can't Stop the Feeling",
+    artist: 'Justin Timberlake',
+    songEmoji: '🌈',
+    tip: 'Happy sunny pop beat! Kick on every quarter note PLUS a late extra — dance time!',
+    instruments: {
+      kick:  [1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0],
+      snare: [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      hihat: [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+    },
+  },
+
+  /* ── LEVEL 4 (new) ───────────────────────────────────────── */
+
+  {
+    id: 'billie_jean',
+    name: 'Billie Jean',
+    level: 4,
+    targetBpm: 118,
+    song: 'Billie Jean',
+    artist: 'Michael Jackson',
+    songEmoji: '🕴',
+    tip: 'One of the most famous beats ever! Kick drops an extra hit on the + of beat 3!',
+    instruments: {
+      crash: [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      kick:  [1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0],
+      snare: [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      hihat: [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+    },
+  },
+
+  {
+    id: 'thriller',
+    name: 'Thriller Beat',
+    level: 4,
+    targetBpm: 104,
+    song: 'Thriller',
+    artist: 'Michael Jackson',
+    songEmoji: '🧟',
+    tip: 'Spooky syncopated kick, then toms jump in at the end for the horror movie fill!',
+    instruments: {
+      kick:  [1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0],
+      snare: [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      hihat: [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+      tom:   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+    },
+  },
+
+  /* ── LEVEL 5 (new) ───────────────────────────────────────── */
+
+  {
+    id: 'in_the_air',
+    name: 'In The Air Tonight',
+    level: 5,
+    targetBpm: 104,
+    song: 'In the Air Tonight',
+    artist: 'Phil Collins',
+    songEmoji: '🌙',
+    tip: 'The most famous drum fill ever! Hi-hat drops out halfway — then BOOM, toms explode!',
+    instruments: {
+      crash: [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      hihat: [1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0],
+      snare: [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      tom:   [0,0,0,0,0,0,0,0,1,1,0,1,1,0,1,1],
+      kick:  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    },
+  },
+
 ];
 
 const INSTRUMENT_META = {

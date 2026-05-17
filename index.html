@@ -130,35 +130,19 @@
     <div id="count-number">3</div>
   </div>
 
-  <!-- ── Reward modal ───────────────────────────────────────────────── -->
-  <div id="reward-modal" class="hidden" role="dialog" aria-modal="true">
-    <div class="reward-content">
-      <span id="reward-emoji">⭐⭐⭐</span>
-      <h2 id="reward-title">Amazing!</h2>
-      <p id="reward-message">You rocked it!</p>
-      <div id="reward-badges" class="hidden"></div>
-      <button id="reward-close" class="big-btn">Keep Going! 🎉</button>
-    </div>
-  </div>
-
-  <!-- ── Accuracy modal (Phase 2) ──────────────────────────────────── -->
-  <div id="accuracy-modal" class="hidden" role="dialog" aria-modal="true">
-    <div class="accuracy-content">
-      <div id="acc-emoji" class="acc-emoji">🎉</div>
-      <h2 id="acc-title" class="acc-title">Great job!</h2>
-      <div id="acc-pct" class="acc-pct">0%</div>
-      <p id="acc-score" class="acc-score">You got 0 out of 0 beats!</p>
-      <div class="acc-breakdown">
-        <span id="acc-green"></span>
-        <span id="acc-yellow"></span>
-        <span id="acc-red"></span>
-      </div>
-      <button id="acc-close" class="big-btn acc-close-btn">Try Again! 🥁</button>
-    </div>
-  </div>
-
   <!-- ── Toast notifications ────────────────────────────────────────── -->
-  <div id="toast" class="hidden" role="status" aria-live="polite"></div>
+  <div id="toast" class="hidden" role="status" aria-live="polite">
+    <div id="toast-emoji" class="toast-emoji"></div>
+    <div class="toast-content">
+      <div id="toast-title" class="toast-title"></div>
+      <div id="toast-msg"   class="toast-msg"></div>
+    </div>
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────────────── -->
+  <footer class="app-footer">
+    Made with ❤️ by <a href="https://github.com/OP-Apps" target="_blank" rel="noopener">OP-Apps</a>
+  </footer>
 
   <!-- ── Scripts (order matters — patterns before rewards before app) ─ -->
   <script src="js/patterns.js"></script>

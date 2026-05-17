@@ -15,14 +15,14 @@ const hitDetector = new HitDetector();
 const timingEval  = new TimingEvaluator();
 
 const state = {
-  pattern:           null,
-  isPlaying:         false,
-  isLooping:         true,
-  isPractice:        false,
-  bpm:               80,
-  currentStep:       -1,
-  loopCount:         0,
-  practiceBpm:       54,
+  pattern:      null,
+  isPlaying:    false,
+  isLooping:    true,
+  isPractice:   false,
+  bpm:          80,
+  currentStep:  -1,
+  loopCount:    0,
+  practiceBpm:  54,
   activeLevel:       'all',
   phase2Active:      false,   // Phase 2: mic listen mode
   lastPhase2Toast:   0,       // timestamp (ms) of last Phase 2 score toast
@@ -268,7 +268,7 @@ function handleLoopComplete(loopNum) {
         }
         setTimeout(clearCellVerdicts, 800);
       } else {
-        showAccuracyModal(score);
+        showAccuracyToast(score);
       }
     }
     timingEval.reset();
@@ -309,7 +309,7 @@ function stopPlayback() {
   if (state.phase2Active) {
     timingEval.flushAll();
     const score = timingEval.getScore();
-    if (score.total > 0) showAccuracyModal(score);
+    if (score.total > 0) showAccuracyToast(score);
   }
   timingEval.reset();
   setPlayingUI(false);
@@ -387,28 +387,25 @@ function updateMicMeter(level) {
                        : '#4ecdc4';
 }
 
-// ── Accuracy modal ────────────────────────────────────────────────────────────
+// ── Accuracy toast ────────────────────────────────────────────────────────────
 
-function showAccuracyModal(score) {
+function showAccuracyToast(score) {
   const { total, perfect, close, misses, hits } = score;
   const pct = total > 0 ? Math.round((hits / total) * 100) : 0;
 
   let emoji, title;
-  if (pct === 100) { emoji = '🌟'; title = 'PERFECT! You\'re amazing!'; }
+  if (pct === 100) { emoji = '🌟'; title = 'PERFECT! Amazing!'; }
   else if (pct >= 80) { emoji = '🎉'; title = 'Awesome drumming!'; }
-  else if (pct >= 60) { emoji = '👍'; title = 'Great job! Keep going!'; }
-  else if (pct >= 40) { emoji = '💪'; title = 'Good try! Practice makes perfect!'; }
-  else                { emoji = '🥁'; title = 'Keep playing — you\'re learning!'; }
+  else if (pct >= 60) { emoji = '👍'; title = 'Great job!'; }
+  else if (pct >= 40) { emoji = '💪'; title = 'Keep going!'; }
+  else                { emoji = '🥁'; title = "You're learning!"; }
 
-  document.getElementById('acc-emoji').textContent  = emoji;
-  document.getElementById('acc-title').textContent  = title;
-  document.getElementById('acc-score').textContent  = `You got ${hits} out of ${total} beats!`;
-  document.getElementById('acc-pct').textContent    = `${pct}%`;
-  document.getElementById('acc-green').textContent  = `🟢 Perfect: ${perfect}`;
-  document.getElementById('acc-yellow').textContent = `🟡 Close: ${close}`;
-  document.getElementById('acc-red').textContent    = `🔴 Missed: ${misses}`;
-
-  document.getElementById('accuracy-modal').classList.remove('hidden');
+  showToast({
+    emoji: `${emoji} ${pct}%`,
+    title,
+    body: `${perfect}🟢 perfect  ${close}🟡 close  ${misses}🔴 missed`,
+    duration: 5000,
+  });
 }
 
 // ── Count-in ──────────────────────────────────────────────────────────────────
@@ -455,32 +452,23 @@ function grantReward(patternId, stars, isPracticeDone) {
   const { newStars, earnedBadges } = rewards.awardStars(patternId, stars, { practiceDone: isPracticeDone });
   updateStarCount(); renderPatternList(); updatePatternInfo(state.pattern); renderBadges();
   if (newStars > prevStars || earnedBadges.length > 0) {
-    showRewardModal(newStars, earnedBadges);
+    showRewardToast(newStars, earnedBadges);
   }
 }
 
-function showRewardModal(stars, earnedBadges) {
-  const modal     = document.getElementById('reward-modal');
-  const emojiEl   = document.getElementById('reward-emoji');
-  const titleEl   = document.getElementById('reward-title');
-  const msgEl     = document.getElementById('reward-message');
-  const badgeArea = document.getElementById('reward-badges');
-  const m3 = ['You\'re a drumming superstar! 🌟', 'Incredible! You nailed it! 🏆', 'You rock the whole stage! 🎸'];
-  const m2 = ['Awesome drumming! 👏', 'You\'re getting so good! 🎉', 'Great job! Keep going! 💪'];
-  const m1 = ['You did it! 🎊', 'First time complete! ⭐', 'Nice work, drummer! 🥁'];
+function showRewardToast(stars, earnedBadges) {
+  const m3 = ['Drumming superstar! 🌟', 'You nailed it! 🏆', 'You rock the stage! 🎸'];
+  const m2 = ['Awesome drumming! 👏', "You're getting so good! 🎉", 'Great job! 💪'];
+  const m1 = ['You did it! 🎊', 'Nice work, drummer! 🥁', 'First time complete!'];
   const pool = { 3: m3, 2: m2, 1: m1 }[stars] || m1;
-  emojiEl.textContent = '⭐'.repeat(stars);
-  titleEl.textContent = pool[Math.floor(Math.random() * pool.length)];
-  msgEl.textContent   = stars === 3 ? 'You used Practice Mode and reached full speed!'
-                      : stars === 2 ? `You played at ${state.bpm} BPM — that's the target!`
-                      : 'You listened through the whole pattern!';
-  if (earnedBadges.length) {
-    badgeArea.innerHTML = earnedBadges.map(b => `<div class="new-badge">${b.emoji} <strong>${b.name}</strong></div>`).join('');
-    badgeArea.classList.remove('hidden');
-  } else {
-    badgeArea.classList.add('hidden');
-  }
-  modal.classList.remove('hidden');
+  const title = pool[Math.floor(Math.random() * pool.length)];
+  const detail = stars === 3 ? 'Practice Mode — full speed reached!'
+               : stars === 2 ? `${state.bpm} BPM — on target!`
+               : 'Pattern complete!';
+  const badgeLine = earnedBadges.length
+    ? '  🏆 ' + earnedBadges.map(b => `${b.emoji} ${b.name}`).join(', ')
+    : '';
+  showToast({ emoji: '⭐'.repeat(stars), title, body: detail + badgeLine, duration: 4500 });
 }
 
 function updateStarCount() {
@@ -514,16 +502,33 @@ function setActiveLevel(level) {
 // ── Toast ─────────────────────────────────────────────────────────────────────
 
 let _toastTimer = null;
-function showToast(msg) {
-  const toast = document.getElementById('toast');
+function showToast(msgOrObj, duration) {
+  const toast    = document.getElementById('toast');
+  const emojiEl  = document.getElementById('toast-emoji');
+  const titleEl  = document.getElementById('toast-title');
+  const msgEl    = document.getElementById('toast-msg');
   if (!toast) return;
-  toast.textContent = msg;
+
+  if (typeof msgOrObj === 'string') {
+    emojiEl.textContent = '';
+    titleEl.textContent = '';
+    msgEl.textContent   = msgOrObj;
+    toast.classList.remove('toast-rich');
+    duration = duration ?? 2500;
+  } else {
+    emojiEl.textContent = msgOrObj.emoji || '';
+    titleEl.textContent = msgOrObj.title || '';
+    msgEl.textContent   = msgOrObj.body  || '';
+    toast.classList.add('toast-rich');
+    duration = duration ?? msgOrObj.duration ?? 5000;
+  }
+
   toast.classList.remove('hidden', 'fade-out');
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => {
     toast.classList.add('fade-out');
     setTimeout(() => toast.classList.add('hidden'), 500);
-  }, 2500);
+  }, duration);
 }
 
 // ── UI helpers ────────────────────────────────────────────────────────────────
@@ -563,17 +568,5 @@ function setupEventListeners() {
 
   document.querySelectorAll('.level-btn').forEach(btn => {
     btn.addEventListener('click', () => setActiveLevel(btn.dataset.level));
-  });
-  document.getElementById('reward-close').addEventListener('click', () => {
-    document.getElementById('reward-modal').classList.add('hidden');
-  });
-  document.getElementById('reward-modal').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) e.currentTarget.classList.add('hidden');
-  });
-  document.getElementById('acc-close').addEventListener('click', () => {
-    document.getElementById('accuracy-modal').classList.add('hidden');
-  });
-  document.getElementById('accuracy-modal').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) e.currentTarget.classList.add('hidden');
   });
 }
